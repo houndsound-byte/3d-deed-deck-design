@@ -6,9 +6,19 @@ import { cn } from '@/lib/utils';
 
 interface DrawingCanvasProps {
   onShapeUpdate: (shapes: any[]) => void;
+  pictureFrame: boolean;
+  breakerPlacement: boolean;
+  onPictureFrameChange: (value: boolean) => void;
+  onBreakerPlacementChange: (value: boolean) => void;
 }
 
-export function DrawingCanvas({ onShapeUpdate }: DrawingCanvasProps) {
+export function DrawingCanvas({ 
+  onShapeUpdate, 
+  pictureFrame, 
+  breakerPlacement,
+  onPictureFrameChange,
+  onBreakerPlacementChange
+}: DrawingCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>(null);
   const [activeTool, setActiveTool] = useState<'draw' | 'rectangle' | 'circle' | 'line' | 'erase'>('draw');
@@ -133,38 +143,62 @@ export function DrawingCanvas({ onShapeUpdate }: DrawingCanvasProps) {
   return (
     <div className="flex flex-col h-full bg-viewport">
       {/* Drawing Toolbar */}
-      <div className="flex items-center gap-2 p-3 bg-panel border-b border-panel-border">
-        <div className="flex gap-1">
-          {tools.map((tool) => {
-            const Icon = tool.icon;
-            return (
-              <Button
-                key={tool.id}
-                variant={activeTool === tool.id ? 'default' : 'secondary'}
-                size="sm"
-                onClick={() => handleToolClick(tool.id)}
-                className={cn(
-                  'gap-2',
-                  activeTool === tool.id && 'bg-primary text-primary-foreground'
-                )}
-              >
-                <Icon className="w-4 h-4" />
-                {tool.label}
-              </Button>
-            );
-          })}
+      <div className="flex flex-col gap-3 p-3 bg-panel border-b border-panel-border">
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1">
+            {tools.map((tool) => {
+              const Icon = tool.icon;
+              return (
+                <Button
+                  key={tool.id}
+                  variant={activeTool === tool.id ? 'default' : 'secondary'}
+                  size="sm"
+                  onClick={() => handleToolClick(tool.id)}
+                  className={cn(
+                    'gap-2',
+                    activeTool === tool.id && 'bg-primary text-primary-foreground'
+                  )}
+                >
+                  <Icon className="w-4 h-4" />
+                  {tool.label}
+                </Button>
+              );
+            })}
+          </div>
+          
+          <div className="flex-1" />
+          
+          <Button variant="outline" size="sm" onClick={handleUndo}>
+            <Undo2 className="w-4 h-4 mr-2" />
+            Undo
+          </Button>
+          
+          <Button variant="destructive" size="sm" onClick={handleClear}>
+            Clear All
+          </Button>
         </div>
-        
-        <div className="flex-1" />
-        
-        <Button variant="outline" size="sm" onClick={handleUndo}>
-          <Undo2 className="w-4 h-4 mr-2" />
-          Undo
-        </Button>
-        
-        <Button variant="destructive" size="sm" onClick={handleClear}>
-          Clear All
-        </Button>
+
+        {/* Deck Options */}
+        <div className="flex items-center gap-6 pt-2 border-t border-panel-border">
+          <label className="flex items-center gap-2 text-sm text-foreground cursor-pointer hover:text-primary transition-colors">
+            <input
+              type="checkbox"
+              checked={pictureFrame}
+              onChange={(e) => onPictureFrameChange(e.target.checked)}
+              className="w-4 h-4 rounded border-input accent-primary"
+            />
+            Picture Frame
+          </label>
+          <label className="flex items-center gap-2 text-sm text-foreground cursor-pointer hover:text-primary transition-colors">
+            <input
+              type="checkbox"
+              checked={breakerPlacement}
+              onChange={(e) => onBreakerPlacementChange(e.target.checked)}
+              className="w-4 h-4 rounded border-input accent-primary"
+            />
+            Breaker Placement
+          </label>
+        </div>
       </div>
 
       {/* Canvas Area */}
