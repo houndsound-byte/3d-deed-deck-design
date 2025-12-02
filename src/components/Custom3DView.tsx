@@ -6,9 +6,11 @@ interface Custom3DViewProps {
   shapes: any[];
   boardColor: string;
   frameColor: string;
+  pictureFrame: boolean;
+  breakerPlacement: boolean;
 }
 
-export function Custom3DView({ shapes, boardColor, frameColor }: Custom3DViewProps) {
+export function Custom3DView({ shapes, boardColor, frameColor, pictureFrame, breakerPlacement }: Custom3DViewProps) {
   return (
     <div className="w-full h-full bg-viewport">
       <Canvas shadows>
@@ -52,6 +54,8 @@ export function Custom3DView({ shapes, boardColor, frameColor }: Custom3DViewPro
           shapes={shapes}
           boardColor={boardColor}
           frameColor={frameColor}
+          pictureFrame={pictureFrame}
+          breakerPlacement={breakerPlacement}
         />
       </Canvas>
     </div>

@@ -16,6 +16,8 @@ const Index = () => {
   const [frameColor, setFrameColor] = useState('#ddb892');
   const [boardOrientation, setBoardOrientation] = useState<'horizontal' | 'vertical'>('horizontal');
   const [customShapes, setCustomShapes] = useState<any[]>([]);
+  const [pictureFrame, setPictureFrame] = useState(false);
+  const [breakerPlacement, setBreakerPlacement] = useState(false);
 
   const handleReset = () => {
     setDeckWidth(4);
@@ -118,7 +120,13 @@ const Index = () => {
             <div className="flex-1 flex flex-col">
               {/* Drawing Canvas */}
               <div className="flex-1">
-                <DrawingCanvas onShapeUpdate={setCustomShapes} />
+                <DrawingCanvas 
+                  onShapeUpdate={setCustomShapes}
+                  pictureFrame={pictureFrame}
+                  breakerPlacement={breakerPlacement}
+                  onPictureFrameChange={setPictureFrame}
+                  onBreakerPlacementChange={setBreakerPlacement}
+                />
               </div>
             </div>
 
@@ -129,6 +137,8 @@ const Index = () => {
                   shapes={customShapes}
                   boardColor={boardColor}
                   frameColor={frameColor}
+                  pictureFrame={pictureFrame}
+                  breakerPlacement={breakerPlacement}
                 />
               </div>
               <div className="h-1/2 border-t border-panel-border overflow-y-auto">
